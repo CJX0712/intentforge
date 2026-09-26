@@ -1,0 +1,23 @@
+# Byte-compiled / cache
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+
+# Environments
+.venv/
+venv/
+env/
+
+# Editors / OS
+.vscode/
+.idea/
+.DS_Store
+
+# Optuna / runtime artifacts
+*.log
+optuna_journal_storage.log
+db.sqlite3
+
+# Local outputs kept intentionally untracked (benchmark.json IS tracked as evidence)
+outputs/

@@ -1,0 +1,15 @@
+# Runtime + test critical dependencies, pinned for reproducibility.
+# Full transitive lock lives in requirements.lock.txt (pip freeze output).
+# Verified environment: Windows 11 / Python 3.13.14 / CPU-only (no CUDA).
+
+numpy==2.5.3
+scipy==1.18.1
+scikit-learn==1.9.1
+xgboost==3.4.1
+optuna==5.0.0
+psutil==7.2.2
+pytest==9.1.1
+
+# Optional (not required for the offline path):
+#   transformers + torch  -> enables the optional TransformerBackend
+# The system auto-detects its absence and degrades gracefully.
