@@ -199,6 +199,11 @@ abstention across heterogeneous backends.
 * Routing distribution: **80.83% fast**, 1.67% escalated to strong, **17.50% abstain**; the strong backend is invoked on only **19.17%** of requests.
 * Memory: 157.3 MB → 155.0 MB RSS across the benchmark run.
 
+**Reproducibility check** — a second full run in a *freshly created* venv
+(`python scripts/bootstrap.py`) reproduced the **quality metrics exactly**
+(0.8183 / 0.8267 / 0.8338) with cascade mean latency **2.0423 ms**. Quality is
+bit-stable under the fixed seed; latency varies ~±10% run-to-run on a shared CPU.
+
 Machine-readable evidence: **[`benchmark.json`](benchmark.json)** (environment, versions, per-backend numbers, timestamp).
 
 > ⚠️ **Read this before quoting the numbers.** The corpus is synthetic by design
