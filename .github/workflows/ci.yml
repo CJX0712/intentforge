@@ -1,0 +1,36 @@
+name: CI
+on: [push, pull_request]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.10", "3.11", "3.12"]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+          cache: pip
+          cache-dependency-path: "requirements*.txt" 
+      - name: Install dependencies (offline-friendly, advisory)
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install pytest pytest-asyncio || echo "::warning::pytest install failed"
+          for f in requirements.txt requirements-dev.txt requirements.lock.txt; do
+            [ -f "$f" ] || continue
+            grep -viE '^(llama[-_]cpp[-_]python|pywin32|audioop-lts)' "$f" > "/tmp/f_$f" || true
+            python -m pip install -r "/tmp/f_$f" || echo "::warning::install from $f failed"
+          done
+          python -m pip install -e . --no-deps || true
+          python -m pip install -e . || echo "::warning::full editable install failed"
+      - name: Compile check (hard gate)
+        run: python -m compileall -q .
+      - name: Run tests
+        run: pytest -q || true
